@@ -1,0 +1,23 @@
+# 依赖
+node_modules/
+
+# 构建产物
+target/
+dist/
+unpackage/
+
+# IDE / 编辑器
+.idea/
+.vscode/
+.hbuilderx/
+*.iml
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.log
+
+# 本地配置
+backend/src/main/resources/application.yaml
+.workbuddy/
+documents/

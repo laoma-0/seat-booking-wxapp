@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: seatbooking
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/seat-booking-app?useUnicode=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 你的密码
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开发期打印SQL，上线可删
+  global-config:
+    db-config:
+      id-type: auto  # 主键自增，对应表里的 AUTO_INCREMENT
+
+server:
+  port: 8080
+     
