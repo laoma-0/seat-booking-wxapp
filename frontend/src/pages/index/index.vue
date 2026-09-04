@@ -24,7 +24,7 @@ onMounted(async() => {
     const data = await request<Area[]>('/api/area/list')
     areas.value = data
   } catch (error) {
-    console.error('Error fetching areas:报错啦，没有数据', error)
+    console.error('Error fetching areas:据报错啦，这里是index.vue', error)
   }
 })
 </script>
