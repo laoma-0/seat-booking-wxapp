@@ -1,7 +1,8 @@
 const BASE_URL = "http://localhost:8080"
 
 export function request<T>(url: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
-  // 请求拦截:你好，请出示证件
+  //1.用户登录后，获取到token
+  //解释代码: 从本地存储中获取token，如果存在则添加到请求头中
   const token = uni.getStorageSync("token")
   const header: any = {
     "Content-Type": "application/json",
@@ -9,9 +10,7 @@ export function request<T>(url: string, method: "GET" | "POST" = "GET", data?: a
   if (token) {
     header["Authorization"] = `Bearer ${token}`
   }
-
-
-  
+   //发送请求
   return new Promise((resolve, reject) => {
     uni.request({
       url: BASE_URL + url,
@@ -33,4 +32,5 @@ export function request<T>(url: string, method: "GET" | "POST" = "GET", data?: a
       fail: (err) => { reject(err) }
     })
   })
+  
 }
