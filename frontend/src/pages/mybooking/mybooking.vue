@@ -16,6 +16,7 @@
                       <text>{{ b.bookDate }}</text>
                       <text>{{ b.startTime }} - {{ b.endTime }}</text>
                    </view>
+				   <view v-if="b.status === 0" class="btn" @click="sign(b.bookingId)">签到</view>
             </view>
 		</view>
 	</view>
@@ -74,7 +75,31 @@ function statusText(s: number): string {
 function statusClass(s: number): string {
   return ['st-wait', 'st-done', 'st-finish', 'st-broken'][s] ?? 'st-wait'
 }
-
+// 签到预约
+async function sign(bid: number){
+	try {
+		const r=await request('/api/booking/sign','POST',{bookingId:bid})
+		if(r === '签到成功'){
+			uni.showToast({
+				title:'签到成功',
+				icon:'success'
+			})
+			//
+			load()
+		}else{
+			uni.showToast({
+				title:String(r),
+				icon:'error'
+			})
+		}
+	} catch (e) {
+		console.error(e)
+		uni.showToast({
+			title:'签到异常！请重试',
+			icon:'error'
+		})
+	}
+}
 // 页面显示时加载预约记录
 onShow(()=>{load()})
 	
@@ -143,5 +168,18 @@ onShow(()=>{load()})
 	background: #DDD2BB; }
 .st-broken { 
 	background: #ECD9CF; }
+.btn {
+  margin-top: 16rpx;
+  background: #547044;
+  color: #F4EDDF;
+  border: 2rpx solid #29231D;
+  box-shadow: 3rpx 3rpx 0 #29231D;
+  border-radius: 6rpx;
+  padding: 12rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
 </style>
 

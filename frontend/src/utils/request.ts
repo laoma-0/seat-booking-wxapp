@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://10.131.241.229:8080"
 
 export function request<T>(url: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
   //1.用户登录后，获取到token
