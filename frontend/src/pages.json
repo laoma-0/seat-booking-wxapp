@@ -11,7 +11,14 @@
 			"style": {
 				"navigationBarTitleText": "座位预约"
 			}
+		},
+		{
+			"path": "pages/seat/seat",
+			"style": {
+				"navigationBarTitleText": "选择座位"
+			}
 		}
+	
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

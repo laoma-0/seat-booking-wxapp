@@ -1,5 +1,5 @@
 package com.seat.config;
-//我是保安
+//送到小区门口：我是保安，，这里是小区门禁
 import com.seat.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/api/**") //禁止外来人员闯入内
-                .excludePathPatterns("/api/auth/login");//欢迎业主回家！！
+                .addPathPatterns("/api/**") 
+                .excludePathPatterns("/api/auth/login");
     }
 }
