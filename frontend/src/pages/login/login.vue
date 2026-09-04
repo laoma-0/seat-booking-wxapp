@@ -33,7 +33,7 @@ async function doLogin(){
 			title:'登录成功',
 			icon:'success'
 		})
-		uni.navigateTo({
+		uni.switchTab({
 			url:'/pages/index/index'
 		})
 	    }else{

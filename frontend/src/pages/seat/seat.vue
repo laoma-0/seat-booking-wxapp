@@ -88,19 +88,19 @@ function onSeatTap(seat: Seat) {
 	} else if(seat.status ===1){
 		uni.showToast({
 			title: '该座位已有人入座,请选择其他座位',
-			icon: 'none'
+			icon: 'error'
 		})
 	}else(
 		uni.showToast({
 			title:'该位置损坏或不可使用，请选择其他座位',
-			icon:'none'
+			icon:'error'
 		})
 	)
 }
 // 确认预约事件
 async function onConfirm(){
 	if (!selectedSeatId.value) {
-		uni.showToast({ title: '请先选择一个座位', icon: 'none' })
+		uni.showToast({ title: '请先选择一个座位', icon: 'error' })
 		return
 	}
 	uni.showActionSheet({

@@ -17,9 +17,27 @@
 			"style": {
 				"navigationBarTitleText": "选择座位"
 			}
+		},
+		{
+			"path": "pages/mybooking/mybooking",
+			"style": {
+				"navigationBarTitleText": "我的预约"
+			}
 		}
 	
 	],
+	"tabBar": {
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/mybooking/mybooking",
+				"text": "我的预约"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
