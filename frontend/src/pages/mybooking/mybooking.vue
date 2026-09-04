@@ -11,12 +11,19 @@
 					<text class="area">{{b.areaName}}</text>
 					<text class="chip" :class="statusClass(b.status)">{{statusText(b.status)}}</text>
 				</view>
-				<view class="seat-no">{{ b.seatNo }}</view>      <!-- ← 补这行 -->
-                    <view class="meta">                              <!-- ← 补这块 -->
+				<!-- 座位号 -->
+				<view class="seat-no">{{ b.seatNo }}</view>    
+				 <!-- 预约时间 -->
+                    <view class="meta">                             
                       <text>{{ b.bookDate }}</text>
                       <text>{{ b.startTime }} - {{ b.endTime }}</text>
                    </view>
-				   <view v-if="b.status === 0" class="btn" @click="sign(b.bookingId)">签到</view>
+				   <!-- 操作按钮 -->
+					<view v-if="b.status === 0" class="btn-group">
+				       <view class="btn" @click="sign(b.bookingId)">签到</view>
+                       <view class="btn-ghost" @click="cancel(b.bookingId)">取消预约</view>
+					</view>
+				   
             </view>
 		</view>
 	</view>
@@ -69,11 +76,11 @@ async function load(){
 }
 // 状态文本
 function statusText(s: number): string {
-  return ['待签到', '已签到', '已完成', '已爽约'][s] ?? '未知状态'
+  return ['待签到', '已签到', '已完成', '已爽约', '已取消预约'][s] ?? '未知状态'
 }
 // 状态类名
 function statusClass(s: number): string {
-  return ['st-wait', 'st-done', 'st-finish', 'st-broken'][s] ?? 'st-wait'
+  return ['st-wait', 'st-done', 'st-finish', 'st-broken', 'st-cancel'][s] ?? 'st-wait'
 }
 // 签到预约
 async function sign(bid: number){
@@ -99,6 +106,39 @@ async function sign(bid: number){
 			icon:'error'
 		})
 	}
+}
+// 取消预约
+async function cancel(bid: number){
+	uni.showModal({
+		title:'确认取消',
+		content:'取消后该时段奖释放给其他同学，确定吗？',
+	
+       success: async (res: any) => {
+        if(!res.confirm) return
+
+	   try {
+			const r=await request('/api/booking/cancel','POST',{bookingId:bid})
+		    if(r === '取消成功'){
+			   uni.showToast({
+				title:'取消成功',
+				icon:'success'
+			   })
+			   load()
+		    }else{
+			  uni.showToast({
+				title:String(r),
+				icon:'error'
+			   })
+		    }
+	    } catch (e) {
+		console.error(e)
+		uni.showToast({
+			title:'取消异常！请重试',
+			icon:'error'
+		})
+	  }
+    }
+   })
 }
 // 页面显示时加载预约记录
 onShow(()=>{load()})
@@ -160,18 +200,42 @@ onShow(()=>{load()})
 	color: #29231D; 
 	opacity: .75; }
 .st-wait   { 
-	background: #F0E6C4; }
+	background: #F0E6C4; 
+}
 .st-done   { 
 	background: #547044; 
-	color: #F4EDDF; }
+	color: #F4EDDF; 
+}
 .st-finish { 
-	background: #DDD2BB; }
+	background: #DDD2BB; 
+}
 .st-broken { 
-	background: #ECD9CF; }
+	background: #ECD9CF; 
+}
+.st-cancel { 
+	background: #E3DED2; 
+}
+.btn-group { 
+	display: flex; 
+	gap: 16rpx; 
+	margin-top: 16rpx; 
+}
 .btn {
-  margin-top: 16rpx;
+  flex: 1;
   background: #547044;
   color: #F4EDDF;
+  border: 2rpx solid #29231D;
+  box-shadow: 3rpx 3rpx 0 #29231D;
+  border-radius: 6rpx;
+  padding: 12rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+.btn-ghost {
+  flex: 1;
+  background: #F4EDDF;
+  color: #29231D;
   border: 2rpx solid #29231D;
   box-shadow: 3rpx 3rpx 0 #29231D;
   border-radius: 6rpx;

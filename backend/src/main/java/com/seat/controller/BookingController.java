@@ -89,6 +89,35 @@ public class BookingController {
         return "签到失败";
       }
     }
+    @PostMapping("/cancel")
+    public String cancelBooking(@RequestBody Booking booking, HttpServletRequest req) {
+       String userId = (String) req.getAttribute("openid");
+       Booking dbBooking = bookingMapper.selectById(booking.getBookingId());
+       if(dbBooking == null) {
+          return "预约不存在";
+        }
+        if(!userId.equals(dbBooking.getUserId())) {
+          return "您不是该预约的用户,无权限取消";
+        }
+        if(dbBooking.getStatus() != 0) {
+          return "该预约无需取消";
+        }
+        //时间校验
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime start = LocalDateTime.of(dbBooking.getBookDate(), dbBooking.getStartTime());
+         if(now.isAfter(start)) {
+          return "预约时间已开始,无法取消";
+        }
+        //更新预约状态
+        dbBooking.setStatus(4);
+        dbBooking.setUpdateTime(LocalDateTime.now());  
+        bookingMapper.updateById(dbBooking);
+        try {
+          return "取消成功";
+        } catch (Exception e) {
+          return "取消失败";
+        }
+    }
 
 
 }
