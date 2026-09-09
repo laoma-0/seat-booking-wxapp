@@ -1,0 +1,62 @@
+/* 校园座位预约小程序 · 设计 Token（纸质墨盒风 / 暖色系）
+   风格来源：暖纸底 + 米色面板 + 2px 墨色硬描边 + 森绿强调 + 硬投影（无模糊）。
+   规则：全项目禁止硬编码裸色值，统一引用以下语义变量。 */
+:root {
+  /* 颜色 —— 暖纸底 + 墨色骨架 + 森绿强调 */
+  --color-bg: #E8E0CF;            /* 页面纸底 */
+  --color-surface: #F4EDDF;       /* 卡片/面板 米色 */
+  --color-surface-raised: #FFFAF0;/* 高亮行/输入区 暖白 */
+  --color-surface-sunken: #DED3BD;/* 分栏/底图 浅褐 */
+  --color-ink: #29231D;          /* 墨色：主文字 + 2px 描边 + 主按钮填充 */
+  --color-ink-soft: #6E6659;     /* 次要文字 */
+  --color-ink-weak: #61594D;      /* 正文弱化 */
+  --color-ink-faint: #8A806F;     /* 占位/分隔 */
+  --color-accent: #547044;        /* 森绿：主操作强调 / 可约 */
+  --color-accent-strong: #3F5633; /* 深绿 hover */
+  --color-accent-soft: #E1E9D8;   /* 浅鼠尾草（图标底/选中浅底） */
+  --color-warning: #9A7320;       /* 赭石 文字 */
+  --color-warning-soft: #F0E6C4;  /* 浅赭（待签到） */
+  --color-danger: #A8503A;        /* 陶土 文字 */
+  --color-danger-soft: #ECD9CF;   /* 浅陶土（爽约/已满） */
+  --color-success-soft: #E1E9D8;  /* 可约浅绿（选中浅底） */
+  --color-border-strong: #29231D; /* 墨描边（硬边骨架色） */
+  --color-border: #8A806F;        /* 细分隔 */
+  --color-neutral-weak: #DDD2BB;  /* 已占/占位 浅褐填充 */
+  --color-text-strong: #29231D;
+  --color-text: #4A443A;
+  --color-text-weak: #8A806F;
+
+  /* 字体 */
+  --font-family: "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, monospace; /* 座位号/数字 等宽点缀 */
+  --font-title: 40rpx;
+  --font-subtitle: 32rpx;
+  --font-body: 28rpx;
+  --font-caption: 24rpx;
+  --font-mini: 20rpx;
+
+  /* 间距 */
+  --space-1: 8rpx;
+  --space-2: 16rpx;
+  --space-3: 24rpx;
+  --space-4: 32rpx;
+  --space-5: 48rpx;
+
+  /* 圆角（neo-brutalism 走低圆角，保留柔和感） */
+  --radius-sm: 6rpx;
+  --radius-xs: 4rpx;
+  --radius-md: 10rpx;
+  --radius-lg: 16rpx;
+  --radius-pill: 999rpx;
+
+  /* 阴影（硬边无模糊，neo-brutalism 标志性块面感） */
+  --shadow-card: 3rpx 3rpx 0 var(--color-ink);
+  --shadow-card-hover: 5rpx 5rpx 0 var(--color-ink);
+  --shadow-hard: 4rpx 4rpx 0 var(--color-ink);
+  --shadow-hard-accent: 4rpx 4rpx 0 var(--color-accent);
+
+  /* 图标尺寸 */
+  --icon-inline: 16px;
+  --icon-button: 20px;
+  --icon-standalone: 24px;
+}

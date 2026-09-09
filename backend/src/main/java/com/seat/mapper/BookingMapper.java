@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface BookingMapper extends BaseMapper<Booking> {
@@ -25,5 +26,15 @@ public interface BookingMapper extends BaseMapper<Booking> {
         "TIMESTAMP(b.book_date, b.start_time) DESC")
   List<BookingVO> selectMyBookings(@Param("userId") String userId);
 
+  /**
+   * 懒更新：把该用户已结束的预约推进到终态，替代定时任务。
+   * 已签到(status=1) -> 2 已完成；仍待签到(status=0) -> 3 已爽约。
+   * 查「我的预约」前调用即可，已取消(4)不受影响。
+   */
+  @Update("UPDATE t_booking " +
+          "SET status = CASE WHEN status = 1 THEN 2 ELSE 3 END, update_time = NOW() " +
+          "WHERE user_id = #{userId} AND status IN (0, 1) " +
+          "AND TIMESTAMP(book_date, end_time) < NOW()")
+  int refreshExpired(@Param("userId") String userId);
 
 }

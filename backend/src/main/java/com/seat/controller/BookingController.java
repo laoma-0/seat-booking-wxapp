@@ -35,37 +35,51 @@ public class BookingController {
        String userId = (String) req.getAttribute("openid");
        booking.setUserId(userId);
 
+       if (booking.getSeatId() == null) {
+          return "座位信息缺失";
+        }
        Seat seat = seatMapper.selectById(booking.getSeatId());
-       if (seat == null || seat.getStatus() != 0) {
+       if (seat == null || seat.getStatus() == null || seat.getStatus() != 0) {
           return "座位不可预约";
         }
       booking.setStatus(0);
+      booking.setCreateTime(LocalDateTime.now());
+      booking.setUpdateTime(LocalDateTime.now());
       try {
         bookingMapper.insert(booking);
         return "预约成功";
       } catch (DuplicateKeyException e) {
         return "该时段已被预约";
+      } catch (Exception e) {
+        e.printStackTrace();
+        return "预约失败：" + e.getMessage();
       }
 
     }
-    // 获取我的预约
+    // 获取我的预约（先把已结束的记录推进到 已完成 / 已爽约）
     @GetMapping("/my")
     public List<BookingVO>  myBookings(HttpServletRequest req) {
        String userId = (String) req.getAttribute("openid");
-        return bookingMapper.selectMyBookings(userId);
+       if (userId != null) {
+          bookingMapper.refreshExpired(userId);
+       }
+       return bookingMapper.selectMyBookings(userId);
     }
     //签到预约
     @PostMapping("/sign")
     public String signBooking(@RequestBody Booking booking, HttpServletRequest req) {
        String userId = (String) req.getAttribute("openid");
+       if (booking.getBookingId() == null) {
+          return "预约信息缺失";
+        }
        Booking dbBooking = bookingMapper.selectById(booking.getBookingId());
        if(dbBooking == null) {
           return "预约不存在";
         }
-        if(!userId.equals(dbBooking.getUserId())) {
+        if(userId == null || !userId.equals(dbBooking.getUserId())) {
           return "您不是该预约的用户,无权限签到";
         }
-        if(dbBooking.getStatus() != 0) {
+        if(dbBooking.getStatus() == null || dbBooking.getStatus() != 0) {
           return "该预约无需签到";
         }
         //时间校验
@@ -82,24 +96,29 @@ public class BookingController {
           return "预约时间已过期,无法签到";
         }
        dbBooking.setStatus(1);
-       bookingMapper.updateById(dbBooking);
+       dbBooking.setUpdateTime(LocalDateTime.now());
        try {
+        bookingMapper.updateById(dbBooking);
         return "签到成功";
       } catch (Exception e) {
+        e.printStackTrace();
         return "签到失败";
       }
     }
     @PostMapping("/cancel")
     public String cancelBooking(@RequestBody Booking booking, HttpServletRequest req) {
        String userId = (String) req.getAttribute("openid");
+       if (booking.getBookingId() == null) {
+          return "预约信息缺失";
+        }
        Booking dbBooking = bookingMapper.selectById(booking.getBookingId());
        if(dbBooking == null) {
           return "预约不存在";
         }
-        if(!userId.equals(dbBooking.getUserId())) {
+        if(userId == null || !userId.equals(dbBooking.getUserId())) {
           return "您不是该预约的用户,无权限取消";
         }
-        if(dbBooking.getStatus() != 0) {
+        if(dbBooking.getStatus() == null || dbBooking.getStatus() != 0) {
           return "该预约无需取消";
         }
         //时间校验
@@ -111,10 +130,11 @@ public class BookingController {
         //更新预约状态
         dbBooking.setStatus(4);
         dbBooking.setUpdateTime(LocalDateTime.now());  
-        bookingMapper.updateById(dbBooking);
         try {
+          bookingMapper.updateById(dbBooking);
           return "取消成功";
         } catch (Exception e) {
+          e.printStackTrace();
           return "取消失败";
         }
     }
